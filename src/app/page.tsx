@@ -1,8 +1,10 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import NewsCard from '@/components/NewsCard'
-import { newsData } from '@/data/newsData'
+import { fetchNewsData } from '@/data/newsData'
+import { NewsItem } from '@/types/news'
 
 const Container = styled.main`
   width: 100%;
@@ -65,6 +67,16 @@ const Grid = styled.div`
 `
 
 export default function Home() {
+  const [newsItems, setNewsItems] = useState<NewsItem[]>([]);
+
+  useEffect(() => {
+    async function loadNews() {
+      const data = await fetchNewsData();
+      setNewsItems(data);
+    }
+    loadNews();
+  }, []);
+
   return (
     <Container>
       <Hero>
@@ -73,10 +85,18 @@ export default function Home() {
       </Hero>
       <Content>
         <Grid>
-          {newsData.map(({ id, ...news }) => (
+          {newsItems.map((news, index) => (
             <NewsCard
-              key={id}
-              {...news}
+              key={index}
+              title={news.제목}
+              description={news.내용}
+              category={news.카테고리}
+              date={news.날짜}
+              author={{
+                name: news.출처,
+                avatar: "https://i.pravatar.cc/150?img=3"
+              }}
+              imageUrl={`https://picsum.photos/300/200?random=${index}`}
             />
           ))}
         </Grid>

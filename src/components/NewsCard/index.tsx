@@ -1,18 +1,20 @@
 'use client'
 
-import { NewsCardProps } from '@/types/news'
 import * as S from './styles'
 
-type NewsCardComponentProps = Omit<NewsCardProps, 'id'>
+type NewsCardProps = {
+  title: string;
+  description: string;
+  imageUrl: string;
+  date: string;
+  category: string;
+  author: {
+    name: string;
+    avatar?: string;
+  };
+}
 
-export default function NewsCard({ 
-  title, 
-  description, 
-  imageUrl, 
-  date,
-  category,
-  author 
-}: NewsCardComponentProps) {
+export default function NewsCard({ title, description, imageUrl, date, category, author }: NewsCardProps) {
   return (
     <S.Card>
       <S.Image src={imageUrl} alt={title} />
