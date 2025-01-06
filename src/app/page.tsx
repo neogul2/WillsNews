@@ -68,7 +68,7 @@ export default function Home() {
   return (
     <Container>
       <Hero>
-        <HeroTitle>William&apos;s News Adventure</HeroTitle>
+        <HeroTitle>Williams News Adventure</HeroTitle>
         <HeroSubtitle>Explore, Learn, and Grow with Every Article - by dad</HeroSubtitle>
       </Hero>
       <Content>
