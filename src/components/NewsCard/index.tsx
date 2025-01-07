@@ -1,8 +1,10 @@
 'use client'
 
 import { useCallback } from 'react'
+import { createRoot } from 'react-dom/client';
 import Swal from 'sweetalert2'
 import * as S from './styles'
+import ChatBot from '../ChatBot'
 
 type NewsCardProps = {
   title: string;
@@ -69,6 +71,7 @@ export default function NewsCard({
           <div class="news-section">
             <h3 class="news-label">토론</h3>
             <p class="news-content">${토론}</p>
+            <div id="chat-bot-container"></div>
           </div>
           ` : ''}
 
@@ -88,6 +91,13 @@ export default function NewsCard({
           </div>
         </div>
       `,
+      didOpen: () => {
+        const chatContainer = document.getElementById('chat-bot-container');
+        if (chatContainer && 토론) {
+          const root = createRoot(chatContainer);
+          root.render(<ChatBot topic={토론} />);
+        }
+      },
       showConfirmButton: false,
       showCloseButton: true,
       width: '700px',
