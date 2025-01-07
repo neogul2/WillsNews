@@ -6,4 +6,5 @@ export interface NewsItem {
   출처: string;
   어휘: string;
   Miscellaneous: string;
+  토론: string;
 } 

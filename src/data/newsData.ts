@@ -8,6 +8,7 @@ interface RawNewsItem {
   출처: string;
   어휘: string;
   Miscellaneous: string;
+  토론: string;
 }
 
 const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw2cBFM2s2Akg0ZazGBWhzn6S1_ojiceAYkhTIZcsCz4CVNldcD8BwZDrx1kdV4c3x0/exec';
@@ -52,7 +53,8 @@ export async function fetchNewsData(): Promise<NewsItem[]> {
         카테고리: item.카테고리?.trim() || '',
         출처: item.출처?.trim() || '',
         어휘: item.어휘?.trim() || '',
-        Miscellaneous: item.Miscellaneous?.trim() || ''
+        Miscellaneous: item.Miscellaneous?.trim() || '',
+        토론: item.토론?.trim() || ''
       }));
 
   } catch (error) {

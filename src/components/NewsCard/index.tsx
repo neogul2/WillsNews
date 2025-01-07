@@ -17,6 +17,7 @@ type NewsCardProps = {
   url: string;
   어휘?: string;
   Miscellaneous?: string;
+  토론?: string;
 }
 
 export default function NewsCard({ 
@@ -28,7 +29,8 @@ export default function NewsCard({
   author,
   url,
   어휘,
-  Miscellaneous 
+  Miscellaneous,
+  토론
 }: NewsCardProps) {
   
   const handleClick = useCallback(() => {
@@ -63,6 +65,13 @@ export default function NewsCard({
           </div>
           ` : ''}
 
+          ${토론 ? `
+          <div class="news-section">
+            <h3 class="news-label">토론</h3>
+            <p class="news-content">${토론}</p>
+          </div>
+          ` : ''}
+
           <div class="news-section news-meta">
             <div class="meta-item">
               <h3 class="news-label">날짜</h3>
@@ -87,7 +96,7 @@ export default function NewsCard({
         title: 'news-modal-title'
       }
     });
-  }, [title, description, imageUrl, date, category, url, 어휘, Miscellaneous]);
+  }, [title, description, imageUrl, date, category, url, 어휘, Miscellaneous, 토론]);
 
   return (
     <S.Card onClick={handleClick}>

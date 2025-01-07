@@ -136,6 +136,7 @@ export default function Home() {
                 imageUrl={`https://api.microlink.io?url=${encodeURIComponent(news.출처)}&screenshot=true&meta=false&embed=screenshot.url`}
                 어휘={news.어휘}
                 Miscellaneous={news.Miscellaneous}
+                토론={news.토론}
               />
             ))
           )}
