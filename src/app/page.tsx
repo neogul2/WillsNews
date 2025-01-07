@@ -66,13 +66,37 @@ const Grid = styled.div`
   padding: 20px;
 `
 
+const LoadingMessage = styled.div`
+  text-align: center;
+  padding: 2rem;
+  font-size: 1.2rem;
+  color: #666;
+`
+
+const ErrorMessage = styled.div`
+  text-align: center;
+  padding: 2rem;
+  color: #ff4444;
+`
+
 export default function Home() {
   const [newsItems, setNewsItems] = useState<NewsItem[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     async function loadNews() {
-      const data = await fetchNewsData();
-      setNewsItems(data);
+      try {
+        setIsLoading(true);
+        setError(null);
+        const data = await fetchNewsData();
+        setNewsItems(data);
+      } catch (err) {
+        setError('Failed to load news data');
+        console.error('Error loading news:', err);
+      } finally {
+        setIsLoading(false);
+      }
     }
     loadNews();
   }, []);
@@ -85,20 +109,31 @@ export default function Home() {
       </Hero>
       <Content>
         <Grid>
-          {newsItems.map((news, index) => (
-            <NewsCard
-              key={index}
-              title={news.제목}
-              description={news.내용}
-              category={news.카테고리}
-              date={news.날짜}
-              author={{
-                name: news.출처,
-                avatar: "https://i.pravatar.cc/150?img=3"
-              }}
-              imageUrl={`https://picsum.photos/300/200?random=${index}`}
-            />
-          ))}
+          {isLoading ? (
+            <LoadingMessage>Loading news...</LoadingMessage>
+          ) : error ? (
+            <ErrorMessage>{error}</ErrorMessage>
+          ) : newsItems.length === 0 ? (
+            <LoadingMessage>No news available</LoadingMessage>
+          ) : (
+            newsItems.map((news, index) => (
+              <NewsCard
+                key={index}
+                title={news.제목}
+                description={news.내용}
+                category={news.카테고리}
+                date={news.날짜}
+                author={{
+                  name: news.출처,
+                  avatar: `https://i.pravatar.cc/150?img=${index + 1}`
+                }}
+                url={news.출처.startsWith('http') ? news.출처 : `https://${news.출처}`}
+                imageUrl={`https://api.microlink.io?url=${encodeURIComponent(news.출처)}&screenshot=true&meta=false&embed=screenshot.url`}
+                어휘={news.어휘}
+                Miscellaneous={news.Miscellaneous}
+              />
+            ))
+          )}
         </Grid>
       </Content>
     </Container>

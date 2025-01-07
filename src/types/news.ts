@@ -4,4 +4,6 @@ export interface NewsItem {
   내용: string;
   카테고리: string;
   출처: string;
+  어휘: string;
+  Miscellaneous: string;
 } 
