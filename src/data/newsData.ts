@@ -14,7 +14,15 @@ const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw2cBFM2s2Akg
 
 export async function fetchNewsData(): Promise<NewsItem[]> {
   try {
-    const response = await fetch(GOOGLE_SCRIPT_URL);
+    console.log('Fetching data from:', GOOGLE_SCRIPT_URL);
+
+    const response = await fetch(GOOGLE_SCRIPT_URL, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+      },
+      mode: 'cors',
+    });
     
     if (!response.ok) {
       console.error('Response not OK:', response.status);
@@ -23,7 +31,6 @@ export async function fetchNewsData(): Promise<NewsItem[]> {
     
     const data = await response.json();
     console.log('Raw data from Google Sheet:', data);
-    console.log('Fetched data:', data);
 
     if (!Array.isArray(data)) {
       console.error('Data is not an array:', data);
@@ -31,7 +38,13 @@ export async function fetchNewsData(): Promise<NewsItem[]> {
     }
 
     return data
-      .filter((item: RawNewsItem) => item && item.날짜 && item.제목)
+      .filter((item: RawNewsItem) => {
+        if (!item || !item.날짜 || !item.제목) {
+          console.log('Filtered out item:', item);
+          return false;
+        }
+        return true;
+      })
       .map((item: RawNewsItem) => ({
         날짜: formatDate(item.날짜),
         제목: item.제목?.trim() || '',
