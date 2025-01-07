@@ -90,7 +90,12 @@ export default function Home() {
         setIsLoading(true);
         setError(null);
         const data = await fetchNewsData();
-        setNewsItems(data);
+        const sortedData = data.sort((a, b) => {
+          const dateA = new Date(a.날짜.replace(/\./g, '-'));
+          const dateB = new Date(b.날짜.replace(/\./g, '-'));
+          return dateB.getTime() - dateA.getTime();
+        });
+        setNewsItems(sortedData);
       } catch (err) {
         setError('Failed to load news data');
         console.error('Error loading news:', err);
