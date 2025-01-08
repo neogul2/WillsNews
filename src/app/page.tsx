@@ -90,11 +90,7 @@ export default function Home() {
         setIsLoading(true);
         setError(null);
         const data = await fetchNewsData();
-        const sortedData = data.sort((a, b) => {
-          const dateA = new Date(a.날짜.replace(/\./g, '-'));
-          const dateB = new Date(b.날짜.replace(/\./g, '-'));
-          return dateB.getTime() - dateA.getTime();
-        });
+        const sortedData = [...data].reverse();
         setNewsItems(sortedData);
       } catch (err) {
         setError('Failed to load news data');
@@ -109,7 +105,7 @@ export default function Home() {
   return (
     <Container>
       <Hero>
-        <HeroTitle>Williams News Adventure</HeroTitle>
+        <HeroTitle> News Adventure for Jaewon</HeroTitle>
         <HeroSubtitle>Explore, Learn, and Grow with Every Article - by dad</HeroSubtitle>
       </Hero>
       <Content>
