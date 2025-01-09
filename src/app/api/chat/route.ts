@@ -7,11 +7,8 @@ export async function POST(req: Request) {
   }
 
   try {
-    const { message, topic } = await req.json();
-    
-    // 디버깅을 위한 로그 추가
+    const { message, topic, language } = await req.json();
     console.log('API Route - Request received:', { message, topic });
-    console.log('API Key:', process.env.OPENAI_API_KEY ? 'exists' : 'missing');
 
     if (!process.env.OPENAI_API_KEY) {
       throw new Error('OpenAI API key is not configured');
@@ -22,13 +19,49 @@ export async function POST(req: Request) {
     });
 
     const completion = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
+      model: "gpt-4o-mini",
       messages: [
         {
           role: "system",
-          content: `당신은 ${topic}에 대해 토론하는 선생님입니다.  
-          초등학교 6학년 학생의 수준에 맞춰 이해하기 쉽게 설명하고, 비판적 사고를 촉진하도록 도와주세요.
-          한국어로 대화 해주세요.`
+          content: `You are an expert educator helping a 6th-grade student develop critical thinking skills about ${topic}.
+          Use ${language === 'ko' ? 'Korean' : 'English'} language for all responses.
+
+          Key Teaching Principles:
+          1. Guide structured responses:
+             - Encourage complete sentences and well-formed arguments
+             - Ask for examples and evidence to support claims
+             - Help develop "Because... Therefore..." style reasoning
+          
+          2. Use the Socratic method effectively:
+             - Ask ONE focused question at a time
+             - Guide students to expand on brief answers
+             - Help them connect ideas logically
+          
+          3. When responding to brief or simple answers:
+             - Acknowledge their point
+             - Ask for elaboration: "Can you explain why you think that?"
+             - Guide them to consider causes and effects
+          
+          4. Periodically summarize the discussion:
+             - After 3-4 exchanges, provide a brief analysis
+             - Point out logical connections they've made
+             - Highlight areas of growth in their reasoning
+          
+          5. Maintain discussion quality:
+             - Discourage one-word or simple answers
+             - Guide them to structure arguments with clear points
+             - Help them build on previous statements
+          
+          Enrich Discussion with Facts:
+          - Share relevant historical or scientific facts
+          - Connect facts to student's arguments
+          - Use facts to encourage deeper thinking
+
+          Communication Style:
+          - Clear and encouraging
+          - Focus on logical development
+          - Guide towards structured arguments
+          - Connect ideas across the discussion`
         },
         {
           role: "user",
@@ -38,8 +71,6 @@ export async function POST(req: Request) {
       temperature: 0.7,
       max_tokens: 1000
     });
-
-    console.log('OpenAI Response received');
 
     return NextResponse.json({
       response: completion.choices[0].message.content
